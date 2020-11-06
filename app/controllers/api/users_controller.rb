@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::UsersController < ApplicationController
-  before_action :find_user, only: %(show update destroy)
   
   def index
     users = User.all
@@ -31,6 +30,7 @@ class Api::UsersController < ApplicationController
   end
 
   def update
+    find_user
     if @user.present?
       @user.first.update(user_details)
       render json: {
@@ -45,8 +45,9 @@ class Api::UsersController < ApplicationController
   end
 
   def destroy
+    find_user
     if @user.present?
-      @user.destroy(user_details)
+      @user.first.destroy(user_details)
       render json: {
         message: 'success',
         data: @user
